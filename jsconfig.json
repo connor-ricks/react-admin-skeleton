@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": ".",
+    "checkJs": true,
+    "paths": {
+      "@client/*": ["lib/client/*"],
+      "@com/*": ["lib/com/*"],
+      "@components/*": ["lib/components/*"],
+      "@models/*": ["lib/models/*"],
+      "@server/*": ["lib/server/*"]
+    },
+    "module": "esnext",
+    "moduleResolution": "node",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "**/*.js",
+    "**/*.jsx",
+    "lib/models/account.js",
+    "lib/models/user.ts",
+    "lib/client/UserProvider.ts"
+  ],
+  "exclude": ["node_modules"]
+}
