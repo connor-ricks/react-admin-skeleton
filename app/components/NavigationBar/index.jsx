@@ -1,4 +1,7 @@
+'use client';
+
 import { Group, ScrollArea, Code, rem } from '@mantine/core';
+import { usePathname } from 'next/navigation';
 
 import {
   IconNotes,
@@ -14,32 +17,35 @@ import NavigationBarFooter from './NavigationBarFooter';
 import { Logo } from './logo';
 
 const mockdata = [
-  { label: 'Dashboard', icon: IconGauge },
+  { label: 'Dashboard', icon: IconGauge, link: '/' },
   {
     label: 'Reports',
     icon: IconNotes,
     initiallyOpened: false,
+    link: '/reports',
     links: [
-      { label: 'Report 1', link: '/' },
-      { label: 'Report 2', link: '/' },
-      { label: 'Report 3', link: '/' },
+      { label: 'Report 1', link: '/1' },
+      { label: 'Report 2', link: '/2' },
+      { label: 'Report 3', link: '/3' },
     ],
   },
-  { label: 'Analytics', icon: IconPresentationAnalytics },
-  { label: 'Contracts', icon: IconFileAnalytics },
+  { label: 'Analytics', icon: IconPresentationAnalytics, link: '/analytics' },
   {
-    label: 'Settings',
+    label: 'Appointments',
     icon: IconCalendarStats,
+    link: '/appointments',
     links: [
-      { label: 'Settings 1', link: '/' },
-      { label: 'Settings 2', link: '/' },
+      { label: 'Upcoming', link: '/upcoming' },
+      { label: 'Past', link: '/past' },
     ],
   },
 ];
 
 export default function NavigationBar() {
+  const path = usePathname();
+
   const links = mockdata.map((item) => (
-    <NavigationBarLinksGroup {...item} key={item.label} />
+    <NavigationBarLinksGroup {...item} key={item.label} path={path} />
   ));
 
   return (

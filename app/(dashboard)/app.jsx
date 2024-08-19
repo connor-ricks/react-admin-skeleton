@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import Header from '@components/Header';
 import NavigationBar from '@components/NavigationBar';
 import ColorSchemeContext from '@contexts/ColorSchemeContext';
-import { theme } from '../theme';
+import { theme } from 'theme';
 
 export default function App({ children }) {
   const [colorScheme, setColorScheme] = useState('light');

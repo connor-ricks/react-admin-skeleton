@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Group,
   Box,
@@ -16,26 +17,60 @@ export default function NavigationBarLinksGroup({
   icon: Icon,
   label,
   initiallyOpened,
+  link,
   links,
+  path,
 }) {
   const hasLinks = Array.isArray(links);
+
+  // console.log('Path', path);
+  // console.log('Link', link);
+  // console.log('Is Selected', isSelected);
+
+  const router = useRouter();
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const items = (hasLinks ? links : []).map((link) => (
-    <Text
-      className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </Text>
-  ));
+
+  const items = (hasLinks ? links : []).map((child) => {
+    const isSelected = path.startsWith(link + child.link);
+    return (
+      <Text
+        className={[isSelected ? classes.selected : null, classes.link]}
+        href={child.link}
+        key={child.label}
+        onClick={() => router.push(link + child.link)}
+      >
+        {child.label}
+      </Text>
+    );
+  });
+
+  const isChildSelected =
+    (hasLinks ? links : []).find((l) => {
+      return path.startsWith(link + l.link);
+    }) != undefined;
+
+  const isSelected =
+    link === '/'
+      ? path === link
+      : link && path.startsWith(link) && !isChildSelected;
+
+  console.log(link, isChildSelected);
 
   return (
     <>
       <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
-        className={classes.control}
+        onClick={() => {
+          if (hasLinks) {
+            setOpened((o) => !o);
+          } else {
+            router.push(link);
+          }
+        }}
+        className={[
+          classes.control,
+          isSelected ? classes.selected : null,
+          isChildSelected ? classes.childSelected : null,
+        ]}
       >
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
