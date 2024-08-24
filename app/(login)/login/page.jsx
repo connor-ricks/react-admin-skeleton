@@ -1,92 +1,103 @@
 'use client';
-
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import {
+  Affix,
+  Alert,
   TextInput,
   PasswordInput,
   Checkbox,
-  Anchor,
   Paper,
   Title,
-  Text,
   Container,
   Group,
   Button,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { IconInfoCircle } from '@tabler/icons-react';
+import ThemeButton from '@components/ThemeButton';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const form = useForm({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
-      remember: false,
-    },
-
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-      password: (val) =>
-        val.length <= 6
-          ? 'Password should include at least 6 characters'
-          : null,
+      remember: true,
     },
   });
 
   async function login(values) {
-    const { email, password, remember } = values;
     setIsLoading(true);
+    const { username, password, remember } = values;
+
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, remember }),
+      body: JSON.stringify({ username, password, remember }),
     });
-    console.log('Response', await response.json());
+
+    const body = await response.json();
+    if (response.status === 200) {
+      router.push(body.redirect);
+    } else {
+      setError(body.message);
+    }
+
     setIsLoading(false);
   }
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center">Blisset!</Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Do not have an account yet?{' '}
-        <Anchor size="sm" component="button">
-          Create account
-        </Anchor>
-      </Text>
+    <>
+      <Container size={420} my={40}>
+        <Title ta="center">Blisset!</Title>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={form.onSubmit((values) => login(values))}>
-          <TextInput
-            key={form.key('email')}
-            {...form.getInputProps('email')}
-            label="Email"
-            placeholder="you@blissetllc.com"
-            required
-          />
-          <PasswordInput
-            key={form.key('password')}
-            {...form.getInputProps('password')}
-            label="Password"
-            placeholder="Your password"
-            required
-            mt="md"
-          />
-          <Group justify="space-between" mt="lg">
-            <Checkbox
-              key={form.key('remember')}
-              {...form.getInputProps('remember', { type: 'checkbox' })}
-              label="Remember me"
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+          {error ? (
+            <Alert
+              variant="light"
+              color="red"
+              title={error}
+              icon={<IconInfoCircle />}
+              mb="sm"
             />
-            <Anchor component="button" size="sm">
-              Forgot password?
-            </Anchor>
-          </Group>
-          <Button loading={isLoading} type="submit" fullWidth mt="xl">
-            Sign in
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+          ) : null}
+          <form onSubmit={form.onSubmit((values) => login(values))}>
+            <TextInput
+              key={form.key('username')}
+              {...form.getInputProps('username')}
+              label="Username"
+              placeholder="Your username"
+              required
+            />
+            <PasswordInput
+              key={form.key('password')}
+              {...form.getInputProps('password')}
+              label="Password"
+              placeholder="Your password"
+              required
+              mt="md"
+            />
+            <Group justify="space-between" mt="lg">
+              <Checkbox
+                key={form.key('remember')}
+                {...form.getInputProps('remember', { type: 'checkbox' })}
+                label="Remember me"
+              />
+            </Group>
+            <Button loading={isLoading} type="submit" fullWidth mt="xl">
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </Container>
+
+      <Affix position={{ top: 20, right: 20 }}>
+        <ThemeButton />
+      </Affix>
+    </>
   );
 }

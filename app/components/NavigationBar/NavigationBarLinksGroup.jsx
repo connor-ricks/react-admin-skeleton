@@ -23,10 +23,6 @@ export default function NavigationBarLinksGroup({
 }) {
   const hasLinks = Array.isArray(links);
 
-  // console.log('Path', path);
-  // console.log('Link', link);
-  // console.log('Is Selected', isSelected);
-
   const router = useRouter();
   const [opened, setOpened] = useState(initiallyOpened || false);
 
@@ -53,8 +49,6 @@ export default function NavigationBarLinksGroup({
     link === '/'
       ? path === link
       : link && path.startsWith(link) && !isChildSelected;
-
-  console.log(link, isChildSelected);
 
   return (
     <>

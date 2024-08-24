@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { ActionIcon, Burger, Group, Text } from '@mantine/core';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import ColorSchemeContext from '@contexts/ColorSchemeContext';
+import ThemeButton from '@components/ThemeButton';
 
 export default function Header({
   toggleMobile,
@@ -33,17 +34,7 @@ export default function Header({
           Blisset
         </Text>
       </Group>
-      <ActionIcon
-        color={dark ? 'yellow' : 'indigo'}
-        onClick={() => colorSchemeContext.onChange(dark ? 'light' : 'dark')}
-        title="Toggle color scheme"
-      >
-        {dark ? (
-          <IconSun style={{ width: '70%', height: '70%' }} />
-        ) : (
-          <IconMoon style={{ width: '70%', height: '70%' }} />
-        )}
-      </ActionIcon>
+      <ThemeButton />
     </Group>
   );
 }
