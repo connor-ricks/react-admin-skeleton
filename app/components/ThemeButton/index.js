@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useContext } from 'react';
 import { ActionIcon } from '@mantine/core';
 import { IconMoon, IconSun } from '@tabler/icons-react';

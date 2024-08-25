@@ -1,14 +1,16 @@
 'use client';
 import '@mantine/core/styles.css';
-import React, { useState } from 'react';
+import React from 'react';
 import { MantineProvider } from '@mantine/core';
+import { useLocalStorage } from '@mantine/hooks';
 import ColorSchemeContext from '@contexts/ColorSchemeContext';
 import { theme } from 'theme';
 
 export default function App({ children }) {
-  const [colorScheme, setColorScheme] = useState(
-    localStorage.getItem('theme') ?? 'light'
-  );
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: 'theme',
+    defaultValue: 'light',
+  });
 
   return (
     <ColorSchemeContext.Provider

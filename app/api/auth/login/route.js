@@ -1,6 +1,6 @@
 import 'server-only';
-import { createSession, activeSession } from 'app/authentication/session';
-import { validateCredentials } from 'app/com';
+import { createSession } from 'app/authentication/session';
+import { validateCredentials } from '@com/authentication';
 
 export async function POST(request) {
   const { username, password, remember } = await request.json();

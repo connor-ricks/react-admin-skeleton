@@ -1,10 +1,8 @@
 'use client';
-
 import React, { useContext } from 'react';
-import { ActionIcon, Burger, Group, Text } from '@mantine/core';
-import { IconMoon, IconSun } from '@tabler/icons-react';
-import ColorSchemeContext from '@contexts/ColorSchemeContext';
+import { Burger, Group, Text } from '@mantine/core';
 import ThemeButton from '@components/ThemeButton';
+import ColorSchemeContext from '@contexts/ColorSchemeContext';
 
 export default function Header({
   toggleMobile,

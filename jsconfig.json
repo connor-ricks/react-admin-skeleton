@@ -2,8 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@authentication/*": ["app/authentication/*"],
       "@components/*": ["app/components/*"],
-      "@contexts/*": ["app/contexts/*"]
+      "@contexts/*": ["app/contexts/*"],
+      "@com/*": ["app/com/*"]
     },
     "module": "esnext",
     "moduleResolution": "node",

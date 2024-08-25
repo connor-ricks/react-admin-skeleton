@@ -1,16 +1,12 @@
 'use client';
-
-import { Group, ScrollArea, Code, rem } from '@mantine/core';
+import { Code, Group, rem, ScrollArea } from '@mantine/core';
 import { usePathname } from 'next/navigation';
-
 import {
   IconNotes,
   IconCalendarStats,
   IconGauge,
   IconPresentationAnalytics,
-  IconFileAnalytics,
 } from '@tabler/icons-react';
-
 import classes from './NavigationBar.module.css';
 import NavigationBarLinksGroup from './NavigationBarLinksGroup';
 import NavigationBarFooter from './NavigationBarFooter';

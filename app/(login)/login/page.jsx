@@ -1,17 +1,17 @@
 'use client';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Affix,
   Alert,
-  TextInput,
-  PasswordInput,
+  Button,
   Checkbox,
-  Paper,
-  Title,
   Container,
   Group,
-  Button,
+  Paper,
+  PasswordInput,
+  TextInput,
+  Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoCircle } from '@tabler/icons-react';
@@ -84,7 +84,9 @@ export default function LoginPage() {
             <Group justify="space-between" mt="lg">
               <Checkbox
                 key={form.key('remember')}
-                {...form.getInputProps('remember', { type: 'checkbox' })}
+                {...form.getInputProps('remember', {
+                  type: 'checkbox',
+                })}
                 label="Remember me"
               />
             </Group>

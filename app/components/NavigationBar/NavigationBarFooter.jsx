@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Popover,
-  Button,
-  UnstyledButton,
-  Group,
   Avatar,
-  Text,
+  Button,
+  Group,
+  Popover,
   rem,
+  Text,
+  UnstyledButton,
 } from '@mantine/core';
 import { IconLogout } from '@tabler/icons-react';
 import classes from './NavigationBarFooter.module.css';

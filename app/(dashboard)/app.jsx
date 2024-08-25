@@ -1,8 +1,9 @@
 'use client';
 import '@mantine/core/styles.css';
-import React, { useState } from 'react';
+
+import React from 'react';
 import { AppShell, MantineProvider } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 
 import Header from '@components/Header';
 import NavigationBar from '@components/NavigationBar';
@@ -10,9 +11,11 @@ import ColorSchemeContext from '@contexts/ColorSchemeContext';
 import { theme } from 'theme';
 
 export default function App({ children }) {
-  const [colorScheme, setColorScheme] = useState(
-    localStorage.getItem('theme') ?? 'light'
-  );
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: 'theme',
+    defaultValue: 'light',
+  });
+
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 

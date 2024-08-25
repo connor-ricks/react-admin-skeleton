@@ -1,95 +1,62 @@
 import 'server-only';
-import { cookies } from 'next/headers';
-import { SignJWT, jwtVerify } from 'jose';
 import {
-  assignRefreshToken,
-  unassignRefreshToken,
-  validateRefreshToken,
-} from 'app/com';
+  accessTokenAge,
+  accessTokenKey,
+  refreshTokenAge,
+  refreshTokenKey,
+} from '@authentication/constants';
+import * as cookies from '@authentication/cookies';
+import * as jwt from '@authentication/jwt';
+import * as com from '@com/authentication';
 
-const secret = process.env.AUTHENTICATION_SECRET;
-
-const refreshTokenKey = 'session.refresh_token';
-const refreshTokenAge = 7 * 24 * 60 * 60; // 7 Day Refresh Expiration.
-
-const accessTokenKey = 'session.access_token';
-const accessTokenAge = 60 * 60; // 1 Hour Access Expiration.
-
-/// Creates an active session for the provided username.
+// Creates an active session for the provided username.
 export async function createSession(username, remember) {
-  async function sign(payload, age) {
-    const now = Math.floor(Date.now() / 1000);
-    const token = await new SignJWT(payload)
-      .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-      .setExpirationTime(now + age)
-      .setIssuedAt(now)
-      .setNotBefore(now)
-      .sign(new TextEncoder().encode(secret));
-
-    cookies().set(payload.type, token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: remember ? age : 0,
-      path: '/',
-    });
-
-    return token;
-  }
-
-  const accessToken = await sign(
+  const accessToken = await jwt.signToken(
     { username, type: accessTokenKey },
     accessTokenAge
   );
+  cookies.setAccessToken(accessToken, remember);
 
-  const refreshToken = await sign(
+  const refreshToken = await jwt.signToken(
     { username, type: refreshTokenKey },
     refreshTokenAge
   );
+  cookies.setRefreshToken(refreshToken, remember);
 
-  assignRefreshToken(username, refreshToken);
+  com.assignRefreshToken(username, refreshToken);
 }
 
-/// Returns the decoded active session if one exists or null.
+// Returns the decoded active session if one exists or null.
 export async function activeSession() {
-  try {
-    const accessToken = cookies().get(accessTokenKey)?.value;
-    if (accessToken == null) {
-      return null;
-    }
-
-    const { payload } = await jwtVerify(
-      accessToken,
-      new TextEncoder().encode(secret)
-    );
-
-    if (payload.type !== accessTokenKey) {
-      console.error('Token type was not an access token!');
-      return null;
-    }
-
-    return payload;
-  } catch (error) {
-    console.error(error);
+  const accessToken = cookies.getAccessToken();
+  const payload = await jwt.verifyToken(accessToken);
+  if (payload == null) {
     return null;
   }
+
+  if (payload.type !== accessTokenKey) {
+    console.error('Token type was not an access token!');
+    return null;
+  }
+
+  return payload;
 }
 
-/// Renews the current active session, if one exists.
-/// (Returns a Boolean that provides context of whether or not the refresh succeeded or not.)
+// Renews the current active session, if one exists.
+// (Returns a Boolean that provides context of whether or not the refresh succeeded or not.)
 export async function refreshSession() {
-  const refreshToken = cookies().get(refreshTokenKey).value;
-  const { payload } = await jwtVerify(
-    refreshToken,
-    new TextEncoder().encode(secret)
-  );
+  const refreshToken = cookies.getRefreshToken();
+  const payload = await jwt.verifyToken(refreshToken);
+  if (payload == null) {
+    return false;
+  }
 
   if (payload.type !== refreshTokenKey) {
     console.error('Token type was not a refresh token!');
     return false;
   }
 
-  if (validateRefreshToken(username, refreshToken)) {
+  if (com.validateRefreshToken(username, refreshToken)) {
     await createSession(payload.username, payload.remember);
     return true;
   } else {
@@ -97,17 +64,11 @@ export async function refreshSession() {
   }
 }
 
-/// Removes existing refresh tokens from the database and clears the user's session.
+// Removes existing refresh tokens from the database and clears the user's session.
 export async function deleteSession() {
-  const accessToken = cookies().get(accessTokenKey).value;
-  cookies().delete(accessTokenKey);
-  cookies().delete(refreshTokenKey);
-
-  try {
-    const { payload } = await jwtVerify(
-      accessToken,
-      new TextEncoder().encode(secret)
-    );
-    unassignRefreshToken(payload.username);
-  } catch (error) {}
+  const accessToken = cookies.getAccessToken();
+  const payload = await jwt.verifyToken(accessToken);
+  com.unassignRefreshToken(payload.username);
+  cookies.deleteAccessToken();
+  cookies.deleteRefreshToken();
 }

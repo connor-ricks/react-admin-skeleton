@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Group,
   Box,
   Collapse,
-  ThemeIcon,
-  Text,
-  UnstyledButton,
+  Group,
   rem,
+  Text,
+  ThemeIcon,
+  UnstyledButton,
 } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
-
 import classes from './NavigationBarLinksGroup.module.css';
 
 export default function NavigationBarLinksGroup({
