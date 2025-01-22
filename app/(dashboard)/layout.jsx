@@ -6,6 +6,8 @@ import {
   IconPresentationAnalytics,
 } from '@tabler/icons-react';
 
+import { headers } from 'next/headers';
+
 import { AccountProvider } from '@client/AccountProvider';
 import { CompanyProvider } from '@client/CompanyProvider';
 import { UserProvider } from '@client/UserProvider';
@@ -15,9 +17,9 @@ import { getCompany } from '@com/company';
 import { getUser } from '@com/user';
 import { getVersion } from '@com/version';
 import Dashboard from '@components/Dashboard';
-import { validateSession } from '@server/authentication/session';
 
 import IMenu from '@models/menu';
+import ISession from '@models/session';
 
 /**
  * The layout for the dashboard.
@@ -26,8 +28,14 @@ import IMenu from '@models/menu';
  * @returns {Promise<React.JSX.Element>}
  */
 export default async function DashboardLayout({ children }) {
-  // Get the account and username from the session.
-  const session = await validateSession();
+  // Extract the account and username from the headers injected by the middleware.
+  const headersStore = await headers();
+
+  /**
+   * Extracted session from the headers injected by the middleware.
+   * @type {ISession}
+   */
+  const session = JSON.parse(headersStore.get('session'));
 
   // Get the version information.
   const version = await getVersion();
@@ -67,7 +75,7 @@ export default async function DashboardLayout({ children }) {
           },
           {
             label: 'Report 2',
-            icon: undefined,
+            icon: <IconNotes />,
             path: '/2',
             suffix: undefined,
             children: undefined,

@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
-import { AppShell } from '@mantine/core';
+import { Affix, AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import DashboardHeader from '@components/DashboardHeader';
-import DashboardNavbar from '@components/DashboardNavbar';
+import DashboardHeader from './DashboardHeader';
+import DashboardNavbar from './DashboardNavbar';
+import ThemeButton from '@components/ThemeButton';
 import IMenu from '@models/menu';
 
 /**
@@ -19,30 +20,41 @@ export default function Dashboard({ menu, children }) {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
   return (
-    <AppShell
-      header={{ height: 60 }}
-      padding="md"
-      navbar={{
-        width: 300,
-        breakpoint: 'sm',
-        collapsed: {
-          mobile: !mobileOpened,
-          desktop: !desktopOpened,
-        },
-      }}
-    >
-      <AppShell.Header>
-        <DashboardHeader
-          toggleDesktop={toggleDesktop}
-          desktopOpened={desktopOpened}
-          toggleMobile={toggleMobile}
-          mobileOpened={mobileOpened}
-        />
-      </AppShell.Header>
-      <AppShell.Navbar>
-        <DashboardNavbar menu={menu} />
-      </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
-    </AppShell>
+    <>
+      <AppShell
+        header={{ height: 60 }}
+        padding="md"
+        navbar={{
+          width: 300,
+          breakpoint: 'sm',
+          collapsed: {
+            mobile: !mobileOpened,
+            desktop: !desktopOpened,
+          },
+        }}
+        styles={{
+          root: {
+            backgroundColor:
+              'light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-9))',
+          },
+        }}
+      >
+        <AppShell.Header>
+          <DashboardHeader
+            toggleDesktop={toggleDesktop}
+            desktopOpened={desktopOpened}
+            toggleMobile={toggleMobile}
+            mobileOpened={mobileOpened}
+          />
+        </AppShell.Header>
+        <AppShell.Navbar>
+          <DashboardNavbar menu={menu} />
+        </AppShell.Navbar>
+        <AppShell.Main>{children}</AppShell.Main>
+      </AppShell>
+      <Affix position={{ bottom: 20, right: 20 }}>
+        <ThemeButton />
+      </Affix>
+    </>
   );
 }

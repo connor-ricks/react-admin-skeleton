@@ -15,21 +15,13 @@ import DashboardNavbarFooter from './DashboardNavbarFooter';
  * @returns {React.JSX.Element}
  */
 export default function DashboardNavbar({ menu }) {
-  useEffect(() => {
-    console.log('Component mounted');
-
-    return () => {
-      console.log('Component unmounted');
-    };
-  }, []);
-
   return (
     <Stack
       flex={1}
       gap={0}
       style={{
         backgroundColor:
-          'light-dark(var(--mantine-color-white), var(--mantine-color-dark-6))',
+          'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-7))',
       }}
     >
       <DashboardNavbarHeader />

@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
-import { Burger, Divider, Group, Text } from '@mantine/core';
-import ThemeButton from '@components/ThemeButton';
+import { Burger, Divider, Group, Text, Title } from '@mantine/core';
+
+import { useCompanyContext } from '@client/CompanyProvider';
 
 /**
  * Dashboard Header component.
@@ -18,8 +19,18 @@ export default function DashboardHeader({
   toggleDesktop,
   desktopOpened,
 }) {
+  const company = useCompanyContext();
+
   return (
-    <Group h="100%" px="md" justify="space-between">
+    <Group
+      h="100%"
+      px="md"
+      justify="space-between"
+      style={{
+        backgroundColor:
+          'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))',
+      }}
+    >
       <Group>
         <Burger
           opened={mobileOpened}
@@ -29,16 +40,25 @@ export default function DashboardHeader({
         />
         <Burger
           opened={desktopOpened}
-          onClick={() => toggleDesktop}
+          onClick={() => toggleDesktop()}
           visibleFrom="sm"
           size="sm"
         />
         <Divider orientation="vertical" />
-        <Text size="xl" fw="bold">
-          🍛 Curry Couriers
-        </Text>
+        <Title order={2} fw={800}>
+          {company.name}
+        </Title>
       </Group>
-      <ThemeButton />
+      <Group>
+        <Title order={2} fw={800}>
+          <Text component="span" c="blue.9" fw={900} inherit>
+            Connect
+          </Text>
+          <Text component="span" c="blue.3" fw={900} inherit>
+            Web
+          </Text>
+        </Title>
+      </Group>
     </Group>
   );
 }
