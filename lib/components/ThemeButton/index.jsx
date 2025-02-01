@@ -1,6 +1,6 @@
 'use client';
-import React from 'react';
 import classes from './ThemeButton.module.css';
+import React from 'react';
 import { useMantineColorScheme, ActionIcon } from '@mantine/core';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 

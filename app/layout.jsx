@@ -11,8 +11,8 @@ import { theme } from '../theme';
 /**
  * The root layout for the website.
  * @param {Object} props - The props for the component.
- * @param {React.JSX.Element} props.children - The children of the component.
- * @returns {Promise<React.JSX.Element>}
+ * @param {React.ReactNode} props.children - The children of the component.
+ * @returns {Promise<React.ReactNode >}
  */
 export default async function RootLayout({ children }) {
   return (

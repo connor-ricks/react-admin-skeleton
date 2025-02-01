@@ -1,23 +1,61 @@
 'use client';
-import React from 'react';
+import React, { version } from 'react';
 import { Affix, AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
+import { IconHome, IconUsers } from '@tabler/icons-react';
+
+import ThemeButton from '@components/ThemeButton';
+
+import IAccount from '@models/account';
+import ICompany from '@models/company';
+import IMenuItem from '@models/menu-item';
+import IPermission from '@models/permission';
+import IUser from '@models/user';
+
 import DashboardHeader from './DashboardHeader';
 import DashboardNavbar from './DashboardNavbar';
-import ThemeButton from '@components/ThemeButton';
-import IMenu from '@models/menu';
+import IVersion from '@models/version';
+import { userHasPermission } from '@server/authentication/permissions';
 
 /**
- * The main dashboard component.
- * @param {Object} props
- * @param {IMenu} props.menu - The menu object used to configure the dashboard's menu.
- * @param {React.JSX.Element} props.children - The dashboard's content.
- * @returns {React.JSX.Element}
+ * The main dashboard layout for authenticated sessions.
+ * @param {Object} props - The props for the component.
+ * @param {IUser} props.user - The current user.
+ * @param {IAccount} props.account - The account information.
+ * @param {ICompany} props.company - The company information.
+ * @param {IVersion} props.version - The version information.
+ * @param {React.ReactNode} props.children - The children of the component.
+ * @returns {React.ReactNode}
  */
-export default function Dashboard({ menu, children }) {
+export default function Dashboard({
+  user,
+  account,
+  company,
+  version,
+  children,
+}) {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+
+  /** @type {Array<IMenuItem>} */
+  let items = [
+    {
+      label: 'Home',
+      icon: <IconHome />,
+      path: '/',
+      children: undefined,
+    },
+  ];
+
+  if (userHasPermission(user, [IPermission.ADMIN, IPermission.USERS_MANAGE])) {
+    items.push({
+      label: 'Users',
+      icon: <IconUsers />,
+      path: '/users',
+      children: undefined,
+    });
+  }
 
   return (
     <>
@@ -41,6 +79,7 @@ export default function Dashboard({ menu, children }) {
       >
         <AppShell.Header>
           <DashboardHeader
+            company={company}
             toggleDesktop={toggleDesktop}
             desktopOpened={desktopOpened}
             toggleMobile={toggleMobile}
@@ -48,7 +87,14 @@ export default function Dashboard({ menu, children }) {
           />
         </AppShell.Header>
         <AppShell.Navbar>
-          <DashboardNavbar menu={menu} />
+          <DashboardNavbar
+            user={user}
+            account={account}
+            version={version}
+            items={items}
+            mobileOpened={mobileOpened}
+            toggleMobile={toggleMobile}
+          />
         </AppShell.Navbar>
         <AppShell.Main>{children}</AppShell.Main>
       </AppShell>

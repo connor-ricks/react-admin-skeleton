@@ -1,143 +1,42 @@
 import React from 'react';
-import {
-  IconNotes,
-  IconCalendarStats,
-  IconGauge,
-  IconPresentationAnalytics,
-} from '@tabler/icons-react';
-
-import { headers } from 'next/headers';
-
-import { AccountProvider } from '@client/AccountProvider';
-import { CompanyProvider } from '@client/CompanyProvider';
-import { UserProvider } from '@client/UserProvider';
-import { VersionProvider } from '@client/VersionProvider';
+import { getVersion } from '@com/version';
 import { getAccount } from '@com/account';
 import { getCompany } from '@com/company';
-import { getUser } from '@com/user';
-import { getVersion } from '@com/version';
+import { getUser } from '@com/users';
 import Dashboard from '@components/Dashboard';
-
-import IMenu from '@models/menu';
-import ISession from '@models/session';
+import { ServerError } from '@components/EmptyStates';
 
 /**
  * The layout for the dashboard.
  * @param {Object} props - The props for the component.
- * @param {React.JSX.Element} props.children - The children of the component.
- * @returns {Promise<React.JSX.Element>}
+ * @param {React.ReactNode} props.children - The children of the component.
+ * @returns {Promise<React.ReactNode >}
  */
 export default async function DashboardLayout({ children }) {
-  // Extract the account and username from the headers injected by the middleware.
-  const headersStore = await headers();
+  try {
+    // Get the version information.
+    const version = await getVersion();
 
-  /**
-   * Extracted session from the headers injected by the middleware.
-   * @type {ISession}
-   */
-  const session = JSON.parse(headersStore.get('session'));
+    // Get the company information.
+    const company = await getCompany();
 
-  // Get the version information.
-  const version = await getVersion();
+    // Get the account information.
+    const account = await getAccount();
 
-  // Get the company information.
-  const company = await getCompany();
+    // Get the current user.
+    const user = await getUser();
 
-  // Get the account informations.
-  const account = await getAccount(session.account);
-
-  // Get the user information.
-  const user = await getUser(session.account, session.username);
-
-  // Create the menu items.
-  /** @type {IMenu} */
-  const menu = {
-    items: [
-      {
-        label: 'Dashboard',
-        icon: <IconGauge />,
-        path: '/',
-        suffix: undefined,
-        children: undefined,
-      },
-      {
-        label: 'Reports',
-        icon: <IconNotes />,
-        path: '/reports',
-        suffix: undefined,
-        children: [
-          {
-            label: 'Report 1',
-            icon: undefined,
-            path: '/1',
-            suffix: undefined,
-            children: undefined,
-          },
-          {
-            label: 'Report 2',
-            icon: <IconNotes />,
-            path: '/2',
-            suffix: undefined,
-            children: undefined,
-          },
-          {
-            label: 'Report 3',
-            icon: undefined,
-            path: '/3',
-            suffix: undefined,
-            children: undefined,
-          },
-        ],
-      },
-      {
-        label: 'Analytics',
-        icon: <IconPresentationAnalytics />,
-        path: '/analytics',
-        suffix: undefined,
-        children: undefined,
-      },
-      {
-        label: 'Appointments',
-        icon: <IconCalendarStats />,
-        path: '/appointments',
-        suffix: undefined,
-        children: [
-          {
-            label: 'Upcoming',
-            icon: undefined,
-            path: '/upcoming',
-            suffix: undefined,
-            children: [
-              {
-                label: 'Tomorrow',
-                icon: undefined,
-                path: '/tomorrow',
-                suffix: undefined,
-                children: undefined,
-              },
-            ],
-          },
-          {
-            label: 'Past',
-            icon: undefined,
-            path: '/past',
-            suffix: undefined,
-            children: undefined,
-          },
-        ],
-      },
-    ],
-  };
-
-  return (
-    <VersionProvider version={version}>
-      <CompanyProvider company={company}>
-        <AccountProvider account={account}>
-          <UserProvider user={user}>
-            <Dashboard menu={menu}>{children}</Dashboard>
-          </UserProvider>
-        </AccountProvider>
-      </CompanyProvider>
-    </VersionProvider>
-  );
+    return (
+      <Dashboard
+        version={version}
+        company={company}
+        account={account}
+        user={user}
+      >
+        {children}
+      </Dashboard>
+    );
+  } catch (error) {
+    return <ServerError error={error} />;
+  }
 }
