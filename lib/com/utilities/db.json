@@ -6,27 +6,26 @@
     },
     "credentials": {
         "account": {
-            "admin": "password",
+            "owner": "password",
             "manager": "password",
             "user": "password"
         }
     },
     "users": {
         "account": {
-            "admin": {
+            "owner": {
                 "metadata": {
                     "account": "account",
-                    "username": "admin",
+                    "username": "owner",
                     "name": "Deborah Ricks",
                     "email": "deborah.ricks@gmail.com",
                     "permissions": {
-                        "admin": true,
+                        "owner": true,
                         "users.manage": true,
                         "account.metadata.edit": true,
                         "self.metadata.edit": true
                     }
-                },
-                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiYWNjb3VudCIsInVzZXJuYW1lIjoiYWRtaW4iLCJzaG91bGRSZW1lbWJlciI6dHJ1ZSwidHlwZSI6InNlc3Npb24ucmVmcmVzaF90b2tlbiIsImV4cCI6MTczOTAwMDAxNiwiaWF0IjoxNzM4Mzk1MjE2LCJuYmYiOjE3MzgzOTUyMTZ9.2jLcXvXSnPK3y5R0YllDh2rGAnMzig5YZ9kwXg8MgoM"
+                }
             },
             "manager": {
                 "account": "account",
@@ -40,7 +39,8 @@
                         "account.metadata.edit": true,
                         "self.metadata.edit": true
                     }
-                }
+                },
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50IjoiYWNjb3VudCIsInVzZXJuYW1lIjoibWFuYWdlciIsInNob3VsZFJlbWVtYmVyIjp0cnVlLCJ0eXBlIjoic2Vzc2lvbi5yZWZyZXNoX3Rva2VuIiwiZXhwIjoxNzQwMjQ0NjAxLCJpYXQiOjE3Mzk2Mzk4MDEsIm5iZiI6MTczOTYzOTgwMX0.URTBpIpV9dst-b0-YEJcz6UcRXKAR4UJdLIxGfCvzLU"
             },
             "user": {
                 "metadata": {
@@ -49,10 +49,10 @@
                     "name": "Connor Ricks",
                     "email": "connor.ricks@gmail.com",
                     "permissions": {
-                        "account.metadata.edit": true,
                         "self.metadata.edit": true
                     }
-                }
+                },
+                "token": null
             }
         }
     },
@@ -71,7 +71,7 @@
                 "accountContact": {
                     "primary": "Deborah Ricks",
                     "phone": "(555) 555-5555",
-                    "email": "admin@currylicious.com"
+                    "email": "owner@currylicious.com"
                 }
             }
         }
@@ -86,9 +86,9 @@
                 "zip": "12345"
             },
             "contact": {
-                "primary": "Admin",
+                "primary": "Owner",
                 "phone": "(555) 555-5555",
-                "email": "admin@currycouriers.com"
+                "email": "owner@currycouriers.com"
             }
         }
     }

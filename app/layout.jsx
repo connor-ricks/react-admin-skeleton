@@ -1,10 +1,12 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import React from 'react';
 import {
   ColorSchemeScript,
   mantineHtmlProps,
   MantineProvider,
 } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 
 import { theme } from '../theme';
 
@@ -26,7 +28,10 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          {children}
+        </MantineProvider>
       </body>
     </html>
   );

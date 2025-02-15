@@ -11,27 +11,12 @@ import UserPermissionsRow from '../UserPermissionsRow';
 /**
  * A table that displays all the permissions for a user.
  * @param {Object} props - The props for the component.
- * @param {IUser} props.self - The current user.
+ * @param {boolean} props.isSelf - A boolean stating whether or not the user is viewing themselves.
+ * @param {boolean} props.canSelfManageUser - A boolean stating whether or not the user can manage the user being viewed.
  * @param {IUser} props.user - The user currently being viewed.
  * @returns {React.ReactNode}
  */
-export default function UserPermissions({ self, user }) {
-  // Check if the user being viewed is the current user.
-  const isSelf = self.username === user.username;
-
-  // Check if the current user has permission to manage other users.
-  const canSelfManageUsers = userHasPermission(self, [
-    IPermission.ADMIN,
-    IPermission.USERS_MANAGE,
-  ]);
-
-  // Check if the user being viewed is an admin.
-  const isThisUserAdmin = userHasPermission(user, [IPermission.ADMIN]);
-
-  // Check if the current user can manage the user being viewed.
-  const canSelfManageThisUser =
-    canSelfManageUsers && !isSelf && !isThisUserAdmin;
-
+export default function UserPermissions({ isSelf, canSelfManageUser, user }) {
   const rows = Object.keys(IPermission).map((key) => {
     return (
       <UserPermissionsRow key={key} permission={IPermission[key]} user={user} />
@@ -42,7 +27,7 @@ export default function UserPermissions({ self, user }) {
     <Stack>
       <Group justify="space-between">
         <Title order={3}>Permissions</Title>
-        {canSelfManageThisUser ? (
+        {canSelfManageUser ? (
           <Button size="xs" leftSection={<IconEdit size={18} />}>
             Edit
           </Button>
@@ -51,7 +36,7 @@ export default function UserPermissions({ self, user }) {
       <Table>
         <Table.Thead>
           <Table.Tr pb="xs">
-            <Table.Th>Key</Table.Th>
+            <Table.Th>Name</Table.Th>
             <Table.Th>Description</Table.Th>
           </Table.Tr>
         </Table.Thead>

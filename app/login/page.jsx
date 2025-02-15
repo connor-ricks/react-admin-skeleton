@@ -52,6 +52,6 @@ export default async function LoginPage() {
       </>
     );
   } catch (error) {
-    return <ServerError />;
+    return <ServerError error={error} />;
   }
 }

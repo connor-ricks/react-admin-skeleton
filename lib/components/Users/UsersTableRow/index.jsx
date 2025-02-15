@@ -12,6 +12,7 @@ import {
 
 import IUser from '@models/user';
 import { useRouter } from 'next/navigation';
+import IPermission from '@models/permission';
 /**
  * A row in the users table.
  * @param {Object} props - The props for the component.
@@ -42,13 +43,24 @@ export default function UsersTableRow({ self, user, isSelected, onSelect }) {
       </Table.Td>
       <Table.Td>
         <Group wrap="nowrap">
-          <Avatar size="md" color="initials" name={user.name} />
+          <Avatar
+            size="md"
+            variant="filled"
+            color="initials"
+            name={user.name}
+          />
           <Anchor onClick={onNavigateToUser} underline="hover">
-            <Text fw={500}>{user.name}</Text>
+            <Text fw={500} style={{ whiteSpace: 'nowrap' }}>
+              {user.name}
+            </Text>
           </Anchor>
           {self.username === user.username ? (
-            <Badge size="sm" variant="light">
+            <Badge size="sm" variant="light" style={{ flexShrink: 0 }}>
               You
+            </Badge>
+          ) : user.permissions[IPermission.OWNER.key] ? (
+            <Badge size="sm" color="red" style={{ flexShrink: 0 }}>
+              Owner
             </Badge>
           ) : null}
         </Group>

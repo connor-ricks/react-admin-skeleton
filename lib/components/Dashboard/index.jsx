@@ -48,7 +48,7 @@ export default function Dashboard({
     },
   ];
 
-  if (userHasPermission(user, [IPermission.ADMIN, IPermission.USERS_MANAGE])) {
+  if (userHasPermission(user, [IPermission.OWNER, IPermission.USERS_MANAGE])) {
     items.push({
       label: 'Users',
       icon: <IconUsers />,

@@ -1,19 +1,10 @@
 import React from 'react';
-import {
-  Button,
-  Group,
-  Paper,
-  Space,
-  Stack,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Paper, Stack } from '@mantine/core';
 
 import { getUser, getUsers } from '@com/users';
 import { NotFound, NoPermissions, ServerError } from '@components/EmptyStates';
 import PermissionsError from '@models/permissions-error';
 import UsersTable from '@components/Users/UsersTable';
-import { IconSearch, IconTrash, IconUserPlus } from '@tabler/icons-react';
 
 /**
  * A page for viewing all users associated with an account.
@@ -36,15 +27,7 @@ export default async function UsersPage() {
     return (
       <Stack style={{ maxWidth: 1000 }}>
         <Paper p="lg">
-          <Stack>
-            <Group justify="space-between">
-              <Title order={3}>Users</Title>
-              <Button leftSection={<IconUserPlus size={18} />} size="xs">
-                Add User
-              </Button>
-            </Group>
-            <UsersTable self={self} users={users} />
-          </Stack>
+          <UsersTable self={self} users={users} />
         </Paper>
       </Stack>
     );

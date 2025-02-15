@@ -23,7 +23,7 @@ export default function UserPermissionsRow({ permission, user }) {
           color={hasPermission ? 'teal' : 'red'}
           variant={hasPermission ? 'filled' : 'outline'}
         >
-          {permission.key}
+          {permission.name}
         </Badge>
       </Table.Td>
       <Table.Td>

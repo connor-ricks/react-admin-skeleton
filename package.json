@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "7.15.2",
-    "@mantine/form": "^7.15.2",
-    "@mantine/hooks": "7.15.2",
+    "@mantine/core": "7.16.2",
+    "@mantine/form": "^7.16.2",
+    "@mantine/hooks": "7.16.2",
+    "@mantine/notifications": "^7.16.2",
     "@tabler/icons-react": "^3.26.0",
     "client-only": "^0.0.1",
     "jose": "^5.9.6",

@@ -13,6 +13,8 @@ import { Button, Container, Group, Text, Title } from '@mantine/core';
 export default function ServerError({ error }) {
   const router = useRouter();
 
+  console.log(error);
+
   // Refresh the site to attempt the site in hopes of resolving the error.
   useEffect(() => {
     router.refresh();
